@@ -14,5 +14,6 @@ public class PlayerAttack : MonoBehaviour
     {
         PONYTAIL,
         TWINTAIL,
+        DUMPLING,
     }
 }

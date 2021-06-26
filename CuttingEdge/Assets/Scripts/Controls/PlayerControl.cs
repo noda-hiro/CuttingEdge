@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 //using UnityEngine.UI;
 public class PlayerControl : MonoBehaviour
 {
@@ -12,10 +13,16 @@ public class PlayerControl : MonoBehaviour
     public float gravity;           //重力
     //public int playerHp = 5;        //playerの体力(仮)
     public PlayerAttack att;
-
+   
+    [SerializeField]
     public FloorCheck floor;
+    [SerializeField]
     public Animator animator;
-    public RectTransform hero = null;
+    [SerializeField]
+    private AtkMove atk;
+ 
+    
+    // public RectTransform hero = null;
     //public GroundDCheck head;     //頭をぶつけた判定
     //private bool isHead = false;  //頭衝突フラグ
     // private Slider _slider;         //Sliderの値を代入する_sliderを宣言
@@ -27,23 +34,26 @@ public class PlayerControl : MonoBehaviour
     private bool isJump = false;    //ジャンプフラグ
     private bool isWrok = true;     //歩行フラグ
     public bool isRight = false;
-    float riSpeed, maxSpeed = 2f;
+   // float riSpeed, maxSpeed = 2f;
     private Rigidbody2D rd2d;
-
+   // private bool nowbool;
 
     public Vector3 movement;
-
+    
     private void Start()
     {
-        hero = GetComponent<RectTransform>();
+       // hero = GetComponent<RectTransform>();
         rd2d = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        animator.SetBool("is1combo", false);
+        animator.SetBool("is2combo", false);
+        atk.atkCount = 0;
+        
         //_slider = slider.GetComponent<Slider>();
     }
     // Update is called once per frame
     void Update()
     {
-
 
         //if (Input.GetKeyDown(KeyCode.P))
         //{
@@ -55,12 +65,10 @@ public class PlayerControl : MonoBehaviour
         //地面の判定
         isFloor = floor.IsFloor();
 
-        //Animetor使用
-        //animator.SetFloat("RightLeft", Input.GetAxis("Horizontal"));
+        
         if (isWrok)
         {
-            // Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
-            //  hero.transform.position += movement * speed/3 * Time.deltaTime;
+           
 
         }
         // if(!isWrok)
@@ -77,6 +85,43 @@ public class PlayerControl : MonoBehaviour
         //{
 
         //}
+        switch (atk.atkCount)
+        {
+            case 0:
+                animator.SetBool("is1combo", false);
+                animator.SetBool("is2combo", false);
+                animator.SetBool("is3combo", false);
+                animator.SetBool("Final", true);
+                break;
+            case 1:
+                animator.SetBool("is1combo", true);
+                animator.SetBool("is2combo", false);
+                animator.SetBool("is3combo", false);
+                animator.SetBool("Final", false);
+                //CDebug.Log("1combo"+atkmv.atkCount);
+                break;
+            case 2:
+                animator.SetBool("is2combo", true);
+                animator.SetBool("is1combo", false);
+                animator.SetBool("is3combo", false);
+                animator.SetBool("Final", false);
+                //CDebug.Log("2combo"+atkmv.atkCount);
+                break;
+            case 3:
+                animator.SetBool("is2combo", false);
+                animator.SetBool("is1combo", false);
+                animator.SetBool("is3combo", true);
+                animator.SetBool("Final", false);
+                //CDebug.Log("3combo"+atkmv.atkCount);
+                break;
+            case 4:
+                animator.SetBool("is2combo", false);
+                animator.SetBool("is1combo", false);
+                animator.SetBool("is3combo", false);
+                animator.SetBool("Final", true);
+                atk.atkCount = 0;
+                break;
+        }
     }
 
 
@@ -84,22 +129,22 @@ public class PlayerControl : MonoBehaviour
     {
         float horizontalKey = Input.GetAxis("Horizontal");
         //isFloor = true;
-
+        
         //Debug.Log(Input.GetAxis("Horizontal"));
         //右入力で右向きに動く
         if (horizontalKey > 0)
         {
-            rd2d.velocity += new Vector2(speed, 0);
+            rd2d.velocity += new Vector2(speed, 0) * (Time.deltaTime * 300);
             animator.SetBool("isrun", true);
             transform.localScale = new Vector3(1, 1, 1);
-            Debug.LogError("push");
-            Debug.Log("右");
+           // Debug.LogError("push");
+           // Debug.Log("右");
             isRight = true;
         }
         //左入力で左向きに動く
         else if (horizontalKey < 0)
         {
-            rd2d.velocity += new Vector2(-speed, 0);
+            rd2d.velocity += new Vector2(-speed, 0) * (Time.deltaTime * 300);
             animator.SetBool("isrun", true);
             transform.localScale = new Vector3(-1, 1, 1);
             // Debug.Log("左");
@@ -112,7 +157,7 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    private void Jump()
+   public void Jump()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -120,28 +165,11 @@ public class PlayerControl : MonoBehaviour
             if (isFloor == true)            //上方向に力を加える(ジャンプ)
             {
                 rd2d.AddForce(Vector2.up * flap);
-                // isJump = true;
-                //hero.transform.position += movement * speed * Time.deltaTime;
-                // Debug.Log("jump");
+               
             }
-            //isFloor = false;
+         
+            
         }
     }
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    Item hititem = collision.gameObject.GetComponent<Item>();
-    //    if (hititem == null) return;
-    //    switch (hititem.m_type)
-    //    {
-    //        case ItemType.k:
-
-    //            break;
-    //        case ItemType.z:
-
-    //            break;
-    //    }
-
-
-
-    //}
+   
 }
