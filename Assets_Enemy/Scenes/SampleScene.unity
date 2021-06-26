@@ -234,9 +234,10 @@ GameObject:
   - component: {fileID: 380347489}
   - component: {fileID: 380347488}
   - component: {fileID: 380347487}
+  - component: {fileID: 380347491}
   m_Layer: 0
   m_Name: Test_Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -353,6 +354,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &380347491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380347486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57e4ac1065ef20048b895d403df05cbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 10
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -621,12 +635,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 550533eb04516924badc63cffddf1271, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnCount_Walk: 3
-  spawnCount_Fly: 5
-  sWalk_X: 0
-  sWalk_Y: 0
-  sFly_X: 0
-  sFly_Y: 0
+  spawnCount_Walk: 0
+  spawnCount_Fly: 1
 --- !u!61 &723733893
 BoxCollider2D:
   m_ObjectHideFlags: 0
