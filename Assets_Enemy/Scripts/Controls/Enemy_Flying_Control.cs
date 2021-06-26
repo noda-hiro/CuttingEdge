@@ -44,7 +44,7 @@ public class Enemy_Flying_Control : MonoBehaviour
 	bool babu_endFlag = false;
 	// Flying_Act_Flagのifが実行中かどうかのフラグ
 	bool duringFlag = false;
-	// 突進攻撃のときにY座標の取得をしたかどうかのフラグ
+	// 座標の取得をしたかどうかのフラグ
 	bool coordinate_getFlag = false;
 	// 真空波攻撃をもう放ったかどうかのフラグ
 	bool fireFlag = false;
@@ -106,11 +106,56 @@ public class Enemy_Flying_Control : MonoBehaviour
 			// moveTimerを1秒ずつ減らす
 			moveTimer -= 1.0f * Time.deltaTime;
 
-			// プレイヤーに向かって移動
-			EM_forPlayer();
+			// moveTimerが4.0未満で3.0以上のときに実行
+			if (3.0 <= moveTimer && moveTimer < 4.0)
+            {
+				// 座標を1回だけ取得
+				Player_Position();
 
+				// 取得した座標に向かって移動
+				EM_forPlayer();
+
+				// coordinate_getFlagをfalseにする
+				coordinate_getFlag = false;
+			}
+			// moveTimerが3.0未満で2.0以上のときに実行
+			else if(2.0 <= moveTimer && moveTimer < 3.0)
+            {
+				// 座標を1回だけ取得
+				Player_Position();
+
+				// 取得した座標に向かって移動
+				EM_forPlayer();
+
+				// coordinate_getFlagをfalseにする
+				coordinate_getFlag = false;
+			}
+			// moveTimerが2.0未満で1.0以上のときに実行
+			else if(1.0 <= moveTimer && moveTimer < 2.0)
+            {
+				// 座標を1回だけ取得
+				Player_Position();
+
+				// 取得した座標に向かって移動
+				EM_forPlayer();
+
+				// coordinate_getFlagをfalseにする
+				coordinate_getFlag = false;
+			}
+			// moveTimerが1.0未満で0.0以上のときに実行
+			else if(0.0 <= moveTimer && moveTimer < 1.0)
+            {
+				// 座標を1回だけ取得
+				Player_Position();
+
+				// 取得した座標に向かって移動
+				EM_forPlayer();
+
+				// coordinate_getFlagをfalseにする
+				coordinate_getFlag = false;
+			}
 			// moveTimerが0秒以下なら実行
-			if (moveTimer <= 0)
+			else if (moveTimer <= 0)
 			{
 				// moveFlagをfalseにする
 				moveFlag = false;
@@ -245,11 +290,25 @@ public class Enemy_Flying_Control : MonoBehaviour
 		}
 	}
 
+	// プレイヤーの座標を1回だけ取得する関数
+	private void Player_Position()
+	{
+		// coordinateFlagがfalseのとき実行
+		if (coordinate_getFlag == false)
+		{
+			// プレイヤーの座標を取得
+			PlayerPosition = PlayerObject.transform.position;
+
+			// coordinateFlagをtrueにする
+			coordinate_getFlag = true;
+		}
+	}
+
 	// エネミーが、プレイヤーに向かって移動する関数
 	private void EM_forPlayer()
 	{
 		float move = SPEED * Time.deltaTime;
-		transform.position = Vector3.MoveTowards(transform.position, PlayerObject.transform.position, move);
+		transform.position = Vector3.MoveTowards(transform.position, PlayerPosition, move);
 	}
 
 	// 突進用関数
@@ -275,6 +334,8 @@ public class Enemy_Flying_Control : MonoBehaviour
 			// 画面内に入ってなかったら、プレイヤーに向かってずっと動き続ける
 			if (isVisible == false)
 			{
+				// 座標を1回だけ取得
+				Player_Position();
 				// うごうご
 				EM_forPlayer();
 			}
@@ -369,6 +430,9 @@ public class Enemy_Flying_Control : MonoBehaviour
 	// Babu専用のオブジェクト停止コルーチン
 	IEnumerator Stop()
 	{
+		// 1回だけプレイヤーの座標を取得
+		Player_Position();
+		// 取得した座標に向かって動く
 		 EM_forPlayer();
 
 		// 0.5秒待つ

@@ -13,7 +13,7 @@ public class Aerial_Slash_Control : MonoBehaviour
 	int EnemyATK = 0;
 
 	// 出現から消滅のタイマー
-	float disappearTimer = 4.0f;
+	float disappearTimer = 2.0f;
 
 	// プレイヤーの座標を取得したかどうかのフラグ
 	bool player_coordinateFlag = false;
