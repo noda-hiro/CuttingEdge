@@ -27,13 +27,17 @@ public class HPControl : MonoBehaviour
     public GameObject slider;       //体力ゲージに指定するSlider
     public ItemType2 nowItem;
     public PlayerStatus nowstatus;
-
+    public GameObject damegeeffect;
     [SerializeField]
     private Slider _slider;         //Sliderの値を代入する_sliderを宣言
-
+    [SerializeField]
+    private AudioClip audio;
+    [SerializeField]
+    private AudioSource audioSource;
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         _slider = slider.GetComponent<Slider>();
         nowstatus = psType=PlayerStatus.None;
     }
@@ -66,6 +70,14 @@ public class HPControl : MonoBehaviour
         //衝突した相手のタグがEnemyなら
         if (collision.gameObject.tag == "Enemy")
         {
+            audioSource.PlayOneShot(audio);
+            foreach (ContactPoint2D point2D in collision.contacts)
+            {
+               
+                CustomDebug.CDebug.Log("当たり");
+                GameObject effect = Instantiate(damegeeffect) as GameObject;
+                effect.transform.position = (Vector3)point2D.point;
+            }
             //playerHpを10減らす
             playerHp -= 10;
             //this.gameObject.SetActive(false);

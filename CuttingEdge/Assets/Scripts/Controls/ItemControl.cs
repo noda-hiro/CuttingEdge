@@ -22,8 +22,10 @@ public class ItemControl : MonoBehaviour
     [SerializeField]
     public Sprite[] m_Sprite;                   //sprite
     public float hairIronNowTime = 0.0f;
-
-
+    [SerializeField]
+    private AudioSource audio;
+    [SerializeField]
+    private AudioClip audioClip;
 
 
     private float atomizerCoolTime = 5f;        //クールダウンの時間
@@ -39,10 +41,17 @@ public class ItemControl : MonoBehaviour
     [SerializeField]
     private GameObject AtomizerPs2;             //水濡れアイコンobj
     [SerializeField]
+    private GameObject PlayerAtomizerPs2;             //player用水濡れアイコンobj
+    [SerializeField]
+    private GameObject PlayerDrayPs2;             //player用水濡れアイコンobj
+    [SerializeField]
     private PlayerControl ply;                  //playerControl
+    [SerializeField]
+    PlayerNowAction nowAction;
     // Start is called before the first frame update
     void Start()
     {
+        audio = GetComponent<AudioSource>();
         //image取得
         m_Image = GetComponent<Image>();
         //現在のDryerクールダウンに現在のクールダウン時間を入れる
@@ -70,6 +79,7 @@ public class ItemControl : MonoBehaviour
                 || nowstatus == PlayerStatus.Dryness && nowItem == ItemType2.Dryer
                 || nowstatus == PlayerStatus.Humidity && nowItem == ItemType2.Dryer)
             {
+               
                 //ドライヤーのクールダウンフラグをtrueにする
                 dryerCoolFlag = true;
                 //アイテム使用関数を呼び出す
@@ -84,6 +94,7 @@ public class ItemControl : MonoBehaviour
             if (nowstatus == PlayerStatus.Dryness && nowItem == ItemType2.Atomizer
                 || nowstatus == PlayerStatus.None && nowItem == ItemType2.Atomizer)
             {
+                
                 //霧吹きのクールダウンフラグをtrueにする
                 atomizerCoolFlag = true;
                 //アイテム使用関数を呼び出す
@@ -93,8 +104,10 @@ public class ItemControl : MonoBehaviour
         // "H"を押しhairIronFlagがfalseで現在のアイテムがヘアアイロンなら選択されているアイテムを使用する
         if (Input.GetKeyDown(KeyCode.H) && hairIronFlag == false&&nowItem==ItemType2.HairIron)
         {
-           // CDebug.Log(nowstatus + "eeeeeeeee");
-                php.playerATK += 1;
+            CDebug.Log(audioClip);
+           
+            // CDebug.Log(nowstatus + "eeeeeeeee");
+            php.playerATK += 1;
                 hairIronFlag = true;
                 AtomizerPs2.SetActive(false);
                 DryerPs.SetActive(false);
@@ -192,6 +205,8 @@ public class ItemControl : MonoBehaviour
     //アイテム使用関数
     public void ItemUse()
     {
+        //if(nowAction==)
+        audio.PlayOneShot(audioClip);
         //選んだアイテムがドライヤーで現在のステータスが水濡れなら
         if (nowItem == ItemType2.Dryer && nowstatus == PlayerStatus.Humidity)
         {
@@ -199,6 +214,7 @@ public class ItemControl : MonoBehaviour
             nowstatus = php.psType = PlayerStatus.None;
             //水濡れアイコンを非表示
             AtomizerPs2.SetActive(false);
+            PlayerAtomizerPs2.SetActive(false);
             //playerの移動速度を10に戻す
             ply.speed = 10;
             //DryerPs.SetActive(false);
@@ -214,6 +230,7 @@ public class ItemControl : MonoBehaviour
             nowstatus = php.psType = PlayerStatus.Dryness;
             //乾燥アイコンを表示
             DryerPs.SetActive(true);
+            PlayerDrayPs2.SetActive(true);
             //AtomizerPs2.SetActive(false);
             CDebug.Log(nowstatus + "Drynessのはず");
 
@@ -226,6 +243,7 @@ public class ItemControl : MonoBehaviour
             nowstatus = php.psType = PlayerStatus.None;
             //乾燥アイコン非表示
             DryerPs.SetActive(false);
+            PlayerDrayPs2.SetActive(false);
             //AtomizerPs2.SetActive(false);
             //Debug.Log(nowstatus);
             CDebug.Log(nowstatus + "通常のはず");
@@ -237,6 +255,7 @@ public class ItemControl : MonoBehaviour
             nowstatus = php.psType = PlayerStatus.Humidity;
             //水濡れアイコン表示
             AtomizerPs2.SetActive(true);
+            PlayerAtomizerPs2.SetActive(true);
             //現在のplayerの移動速度(10)から-４引く
             ply.speed -= 4;
             //DryerPs.SetActive(false);

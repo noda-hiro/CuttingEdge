@@ -7,7 +7,14 @@ public class FloorCheck : MonoBehaviour
     private string floorTag = "Floor";  //Floorタグ用
     private bool isFloor = false;       //床判定
     private bool isFloorEnter, isFloorStay, isFloorExit;    //(床に入った　床にいる　床から出た)フラグ
-
+    [SerializeField]
+    private PlayerControl p;
+    public AudioSource audio;
+    public AudioClip audioClip;
+    private void Start()
+    {
+        audio = GetComponent<AudioSource>();
+    }
     //接地判定を返すメソッド
     //物理判定の更新毎に呼ぶ必要がある
     public bool IsFloor()
@@ -31,6 +38,9 @@ public class FloorCheck : MonoBehaviour
     {
         if (collision.tag == floorTag)
         {
+            audio.PlayOneShot(audioClip);
+            p.isJump = false;
+            p.jumpCount = 0;
             isFloorEnter = true;
             // Debug.Log("1");
         }

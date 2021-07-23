@@ -12,7 +12,6 @@ public class AtkMove : MonoBehaviour
     public float atkSpeed = 10.0f;  //攻撃スピード
     private bool _isAtkFrag = false;//攻撃中確認フラグ
    // public float offensiveAbility = 10;//playerの攻撃力
-
     Vector2 PlayerPos;
     Vector2 PlayerAtkPos;
     public float atkRange = 20.0f;  //攻撃範囲
@@ -117,7 +116,7 @@ public class AtkMove : MonoBehaviour
         {
             this.transform.position = new Vector2(PlayerPos.x, PlayerPos.y + 83);
             _isAtkFrag = false;
-            Debug.Log("成功しました");
+           // Debug.Log("成功しました");
         }
 
     }

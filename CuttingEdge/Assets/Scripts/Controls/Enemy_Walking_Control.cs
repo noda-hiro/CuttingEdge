@@ -16,7 +16,7 @@ public class Enemy_Walking_Control : MonoBehaviour
     // 二足歩行の移動速度
     float SPEED = 0.0f;
 
-    Vector3 targetPosition;
+    Transform target;
    
     // ゲームオブジェクトが入る変数
     GameObject EW;
@@ -38,6 +38,8 @@ public class Enemy_Walking_Control : MonoBehaviour
         CDebug.ColorLog(gameObject.name, "blue");
         //playerHP = GetComponent<HPControl>();
         playerHP = GameObject.Find("Player").GetComponent<HPControl>();
+        // プレイヤーのオブジェクトの位置を取得
+        target = GameObject.Find("Player").transform;
     }
 
     // Update is called once per frame
@@ -51,12 +53,11 @@ public class Enemy_Walking_Control : MonoBehaviour
             this.gameObject.SetActive(false);
         }
 
-        // プレイヤーのオブジェクトの位置を取得
-        targetPosition = GameObject.Find("Player").transform.position;
+        
 
         //ずっと追いかける
         float move = SPEED * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, move);
+        transform.position = Vector3.MoveTowards(transform.position, target.position, move);
 
     }
     //野田追加点2
@@ -72,12 +73,13 @@ public class Enemy_Walking_Control : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Attack")
+        if (collision.gameObject.tag == "Attack"|| collision.gameObject.tag == "Dumpling")
         {
+            Debug.Log("gogjgoog");
             //var p = collision.gameObject.GetComponent<HPControl>();
             this.gameObject.SetActive(false);
             nowStatus = playerHP.psType;
-            CDebug.Log(nowStatus);
+           // CDebug.Log(nowStatus);
             //Damege(p);
             /*= PlayerStatus.dryness*/
             if (nowStatus == PlayerStatus.Dryness)
